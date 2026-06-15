@@ -181,7 +181,7 @@ var plat=parseFloat(loc[1]);
 var dist=p.distance?parseInt(p.distance):0;
 var biz=p.biz_ext||{};
 var rating=biz.rating||"4.2";
-var cost=biz.cost?parseInt(biz.cost.replace(/\D/g,"")):35;
+var cost=biz.cost?Math.round(parseFloat(biz.cost)):35;
 var cuisine=gc(p.name,p.type||"");
 return{id:++id,n:p.name,c:cuisine,e:ge(p.name,p.type||""),r:rating,p:cost,d:dist,a:p.address||"暂无地址",ll:{lat:plat,lng:plng}}
 });
