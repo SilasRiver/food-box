@@ -165,9 +165,10 @@ document.getElementById("mapDiv").innerHTML='<img src="https://restapi.amap.com/
 
 function doSearch(lat,lng){
 var list=document.getElementById("rl");
-list.innerHTML='<div class="ld">正在搜索附近餐厅...</div>';
+list.innerHTML='<div class="ld">正在搜索附近餐厅...('+lat.toFixed(2)+","+lng.toFixed(2)+")</div>";
 var cb="cb_"+Date.now();
 window[cb]=function(data){
+console.log("JSONP回调触发,data:",data);
 delete window[cb];
 var old=document.getElementById("jsonp");
 if(old)old.remove();
@@ -197,9 +198,10 @@ loadMock();
 var sc=document.createElement("script");
 sc.id="jsonp";
 sc.src="https://restapi.amap.com/v3/place/around?key="+AK+"&location="+lng+","+lat+"&radius=2000&types=050000&offset=25&callback="+cb;
-sc.onerror=function(){delete window[cb];toast("搜索失败");loadMock()};
+sc.onerror=function(){console.log("JSONP脚本加载失败");delete window[cb];toast("搜索失败");loadMock()};
 document.head.appendChild(sc);
-setTimeout(function(){if(window[cb]){delete window[cb];toast("搜索超时");loadMock()}},8000);
+console.log("JSONP script added, URL:",sc.src);
+setTimeout(function(){if(window[cb]){console.log("JSONP超时,回调未触发");delete window[cb];toast("搜索超时");loadMock()}},8000);
 }
 
 function updateMapMarkers(arr){
